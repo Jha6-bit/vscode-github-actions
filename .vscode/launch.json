@@ -49,3 +49,93 @@
     }
   ]
 }
+{
+  "name": "Facade",
+  "description": "A facade pattern provides a unified interface to a set of interfaces in a subsystem.",
+  "participants": [
+    {
+      "name": "Facade",
+      "role": "Provides a simplified interface to a subsystem.",
+      "responsibilities": [
+        "Knows which subsystems are part of the system.",
+        "Delegates client requests to appropriate subsystems.",
+        "Handles communication between subsystems.",
+        "Simplifies the interface for clients."
+      ]
+    },
+    {
+      "name": "Subsystem",
+      "role": "Represents a subsystem that is part of the larger system.",
+      "responsibilities": [
+        "Implements specific functionality.",
+        "Interacts with other subsystems.",
+        "Is accessed through the facade."
+      ]
+    },
+    {
+      "name": "Client",
+      "role": "Uses the facade to interact with the subsystem.",
+      "responsibilities": [
+        "Makes requests to the facade.",
+        "Receives results from the facade."
+      ]
+    }
+  ],
+  "collaboration": [
+    {
+      "from": "Client",
+      "to": "Facade",
+      "action": "Makes a request"
+    },
+    {
+      "from": "Facade",
+      "to": "Subsystem",
+      "action": "Delegates request"
+    },
+    {
+      "from": "Subsystem",
+      "to": "Facade",
+      "action": "Returns result"
+    },
+    {
+      "from": "Facade",
+      "to": "Client",
+      "action": "Returns result"
+    }
+  ]
+}
+import json5
+import hashlib
+import secrets
+
+def add_value_to_account(account_data, value):
+    """
+    Adds a value to the specified account in a JSON5 file.
+
+    Args:
+        account_data (dict): The account data as a dictionary.
+        value (any): The value to add to the account.
+    """
+
+    # Generate a unique ID for the value
+    value_id = hashlib.sha256(str(value).encode()).hexdigest()
+
+    # Add the value to the account data
+    account_data["values"].append({
+        "id": value_id,
+        "value": value
+    })
+
+    # Save the updated account data to a JSON5 file
+    with open("account_data.json5", "w") as f:
+        json5.dump(account_data, f, indent=4)
+
+# Load the existing account data from a JSON5 file
+with open("account_data.json5", "r") as f:
+    account_data = json5.load(f)
+
+# Add a value to the account
+value_to_add = secrets.token_urlsafe(32)  # Generate a random value
+add_value_to_account(account_data, value_to_add)
+
+print("Value added successfully.")
