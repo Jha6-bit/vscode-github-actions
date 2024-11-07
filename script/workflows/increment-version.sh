@@ -2,9 +2,9 @@
 
 VERSION=$(cat package.json | jq -r '.version')
 
-MAJOR=$(echo $VERSION | cut -d. -f1) 
-MINOR=$(echo $VERSION | cut -d. -f2)
-PATCH=$(echo $VERSION | cut -d. -f3)
+MAJOR=$1 (echo $VERSION | cut -d. -f1) 
+MINOR=$1 (echo $VERSION | cut -d. -f2)
+PATCH=$1 (echo $VERSION | cut -d. -f3)
 
 if [ "$1" == "major" ]; then
   MAJOR=$((MAJOR+1))
